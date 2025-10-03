@@ -19,7 +19,7 @@ setGlobalOptions({
 // --- 1. CONFIGURAÇÃO (Segredos e Instrução de Sistema) ---
 
 // A chave é lida do namespace 'gemini' configurado com firebase functions:config:set
-const apiKey = functions.config().gemini.key; 
+const apiKey = process.env.GENAI_API_KEY; 
 
 const systemInstruction = "Você é um assistente de IA altamente especializado. Sua única fonte de informação e referência para responder a todas as perguntas é o Manual Diagnóstico e Estatístico de Transtornos Mentais, 5ª Edição (DSM-5). SE VOCÊ NÃO PUDER ENCONTRAR A INFORMAÇÃO NO DSM-5, você deve responder com clareza que a informação solicitada está fora de sua base de conhecimento restrita ao DSM-5 ou solicitar que o usuário reformule a pergunta usando termos do manual. Não invente ou use outras fontes. Mantenha as respostas focadas e clinicamente relevantes.";
 
