@@ -1,14 +1,20 @@
-// functions/index.js (CÓDIGO OTIMIZADO PARA HTTP - GEN 2)
+// functions/index.js (IMPORTAÇÃO CORRIGIDA PARA GEN 2)
 
-const functions = require('firebase-functions');
-const { GoogleGenAI } = require('@google/genai');
+// Mude esta linha:
+// const functions = require('firebase-functions');
 
-// Força o Node.js 18 no código para evitar erros de deploy no futuro
-// (Mantemos a correção que provou ser necessária)
-const runtimeOpts = {
-  runtime: 'nodejs18',
-  region: 'us-central1',
-};
+// Para esta:
+const {onRequest} = require('firebase-functions/v2/https');
+const {setGlobalOptions} = require('firebase-functions/v2');
+const {GoogleGenAI} = require('@google/genai');
+const functions = require('firebase-functions'); // Mantemos este para acessar o config().gemini.key
+
+// Definir a região e o tempo de execução globalmente
+setGlobalOptions({ 
+    region: 'us-central1', 
+    timeoutSeconds: 300, // Dá mais tempo para a IA responder, por segurança
+});
+
 
 // --- 1. CONFIGURAÇÃO (Segredos e Instrução de Sistema) ---
 
@@ -23,7 +29,7 @@ const systemInstruction = "Você é um assistente de IA altamente especializado.
 /**
  * Endpoint HTTP seguro para receber perguntas e chamar o Gemini.
  */
-exports.dsm5Query = functions.runWith(runtimeOpts).https.onRequest(async (req, res) => {
+exports.dsm5Query = onRequest(async (req, res) => {
     // 2.1. Habilitar CORS para que o frontend possa chamar o backend
     res.set('Access-Control-Allow-Origin', '*');
     res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
