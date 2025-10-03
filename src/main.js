@@ -14,11 +14,10 @@ const firebaseConfig = {
 // Inicialização dos serviços
 const app = initializeApp(firebaseConfig);
 
-// URL da sua Cloud Function (O Firebase preenche isso no deploy)
-// A URL terá o formato: https://us-central1-[PROJECT-ID].cloudfunctions.net/dsm5Query
-// Para o desenvolvimento local, você precisaria de uma URL diferente, mas para o deploy é esta:
-const FUNCTION_URL = `https://us-central1-${app.options.projectId}.cloudfunctions.net/dsm5Query`;
+const PROJECT_ID = 'dsm-ai-mvp'; 
 
+// Atualize a URL para usar o ID corrigido:
+const FUNCTION_URL = `https://us-central1-${PROJECT_ID}.cloudfunctions.net/dsm5Query`; 
 // --- 2. FUNÇÃO DE GERAÇÃO DA RESPOSTA (CHAMA O ENDPOINT HTTP) ---
 
 /**
