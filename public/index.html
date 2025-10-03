@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSM-5 AI Assistant (MVP)</title>
+    
+    <link rel="stylesheet" href="../styles/style.css"> 
+</head>
+<body>
+    <div id="app-container">
+        <h1>DSM-5 AI Assistant</h1>
+        
+        <div id="chat-container">
+            <div id="chat-window">
+                <div class="message system-message">
+                    Olá! Sou seu assistente de IA especializado no DSM-5. Pergunte sobre critérios, diagnósticos ou condições.
+                </div>
+            </div>
+            
+            <div id="input-area">
+                <input type="text" id="user-input" placeholder="Pesquisar critérios de transtorno..." autofocus>
+                <button id="send-button">
+                    <span class="send-icon">➤</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../src/main.js"></script>
+</body>
+</html>
