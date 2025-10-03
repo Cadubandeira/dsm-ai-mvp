@@ -1,44 +1,53 @@
-// src/main.js (CÓDIGO DE FRONTEND REVISADO)
+// src/main.js (CÓDIGO DE FRONTEND REVISADO para chamar URL HTTP)
 
-// Importa os módulos do Firebase para comunicação com o Backend
-import { initializeApp } from 'firebase/app';
-import { getFunctions, httpsCallable } from 'firebase/functions';
+// Importa apenas a inicialização do Firebase para evitar erros (NÃO PRECISAMOS MAIS DE getFunctions)
+import { initializeApp } from 'firebase/app'; 
+// import { getFunctions, httpsCallable } from 'firebase/functions'; // REMOVER esta linha
 
 // --- 1. CONFIGURAÇÃO E CONEXÃO DO FIREBASE ---
 
-// A configuração é injetada automaticamente pelo Firebase no Hosting
-// Se for local, essa config pode ser vazia, mas no deploy ela será preenchida.
+// A configuração é injetada automaticamente
 const firebaseConfig = {
-    // Insira aqui os dados de config do seu projeto do Firebase (API Key, Project ID, etc.)
-    // Você pode pegar isso no Console do Firebase > Configurações do Projeto
+    // Sua configuração aqui
 };
 
 // Inicialização dos serviços
 const app = initializeApp(firebaseConfig);
-const functions = getFunctions(app);
 
-// Referência à função callable que criamos no backend (dsm5Query)
-const dsm5Query = httpsCallable(functions, 'dsm5Query'); 
+// URL da sua Cloud Function (O Firebase preenche isso no deploy)
+// A URL terá o formato: https://us-central1-[PROJECT-ID].cloudfunctions.net/dsm5Query
+// Para o desenvolvimento local, você precisaria de uma URL diferente, mas para o deploy é esta:
+const FUNCTION_URL = `https://us-central1-${app.options.projectId}.cloudfunctions.net/dsm5Query`;
 
-// --- 2. FUNÇÃO DE GERAÇÃO DA RESPOSTA (CHAMA O BACKEND) ---
+// --- 2. FUNÇÃO DE GERAÇÃO DA RESPOSTA (CHAMA O ENDPOINT HTTP) ---
 
 /**
- * Envia o prompt para a Firebase Function no servidor seguro.
+ * Envia o prompt para a Firebase Function via requisição Fetch.
  */
 async function generateResponse(prompt) {
     try {
-        // Envia o prompt para a função Firebase
-        const result = await dsm5Query({ prompt: prompt });
-        
-        // Retorna o campo 'text' que a função backend retorna
-        return result.data.text; 
+        const response = await fetch(FUNCTION_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ prompt: prompt }),
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+            return data.text; 
+        } else {
+            // Captura erros retornados pelo servidor
+            console.error('Erro do Backend:', data.message);
+            return `Desculpe, ocorreu um erro no servidor: ${data.message}`;
+        }
     } catch (error) {
-        console.error('Erro ao chamar a Firebase Function:', error);
-        // O erro do servidor é encapsulado aqui
-        return 'Desculpe, ocorreu um erro na comunicação com o servidor seguro. Verifique o console.';
+        console.error('Erro ao chamar o endpoint HTTP:', error);
+        return 'Desculpe, falha na comunicação com o servidor. Verifique o console.';
     }
 }
-
 
 // --- 3. FUNÇÕES E LISTENERS DE INTERAÇÃO COM A UI (O CÓDIGO DA UI PERMANECE O MESMO) ---
 
