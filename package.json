@@ -2,11 +2,11 @@
   "name": "dsm-ai-mvp",
   "version": "1.0.0",
   "description": "",
-"scripts": {
-  "start": "parcel public/index.html",
-  "build": "parcel build public/index.html",
-  "clean": "del .parcel-cache dist /s /q" 
-},
+  "scripts": {
+    "start": "parcel public/index.html",
+    "build": "parcel build public/index.html",
+    "clean": "del .parcel-cache dist /s /q"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -15,6 +15,7 @@
     "parcel": "^2.16.0"
   },
   "dependencies": {
-    "@google/genai": "^1.22.0"
+    "@google/genai": "^1.22.0",
+    "firebase": "^12.3.0"
   }
 }
