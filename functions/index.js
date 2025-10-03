@@ -13,6 +13,8 @@ const functions = require('firebase-functions'); // Mantemos este para acessar o
 setGlobalOptions({ 
     region: 'us-central1', 
     timeoutSeconds: 300, // Dá mais tempo para a IA responder, por segurança
+        // NOVO: Limita a escalabilidade para proteger o custo
+    maxInstances: 2 
 });
 
 
